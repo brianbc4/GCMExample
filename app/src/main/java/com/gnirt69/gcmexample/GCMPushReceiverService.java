@@ -17,9 +17,11 @@ import com.google.android.gms.gcm.GcmListenerService;
 public class GCMPushReceiverService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
+        String message = data.getString("gcm.notification.body");
         sendNotification(message);
     }
+
+    static int i=0;
     private void sendNotification(String message) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -31,12 +33,13 @@ public class GCMPushReceiverService extends GcmListenerService {
         //Build notification
         NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentText("My GCM message :X:X")
+                .setContentTitle("!!!!!!!!")
                 .setContentText(message)
+                .setSound(sound)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, noBuilder.build()); //0 = ID of notification
+        notificationManager.notify(i++, noBuilder.build()); //0 = ID of notification
     }
 }
